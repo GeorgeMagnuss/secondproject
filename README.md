@@ -2,6 +2,8 @@
 
 This project is part of the Python Full Stack Web Developer course – Part II. It’s a web application built with Django that allows users to register, log in, and interact with a list of vacation packages. Admin users can also manage (add, edit, delete) vacation entries.
 
+GitHub Link: https://github.com/GeorgeMagnuss/secondproject
+
 ## Student Info
 
 - **Name**: George Mattar

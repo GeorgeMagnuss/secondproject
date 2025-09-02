@@ -47,7 +47,8 @@ class User(AbstractUser):
     role = models.ForeignKey(
         Role, 
         on_delete=models.CASCADE,
-        related_name='users'
+        related_name='users',
+        db_column='role_id'
     )
     
     username = None

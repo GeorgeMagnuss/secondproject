@@ -185,9 +185,6 @@ def delete_vacation_view(request, vacation_id):
 @login_required
 @require_POST
 def toggle_like_view(request, vacation_id):
-    if request.user.is_admin:
-        return JsonResponse({'success': False, 'error': 'Admins cannot like vacations'})
-    
     vacation = get_object_or_404(Vacation, id=vacation_id)
     like, created = Like.objects.get_or_create(
         user=request.user,
