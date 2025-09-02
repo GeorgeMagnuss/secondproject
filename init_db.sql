@@ -45,37 +45,16 @@ CREATE TABLE likes (
     UNIQUE(user_id, vacation_id)
 );
 
--- Create Django Session Table
-CREATE TABLE django_session (
-    session_key VARCHAR(40) PRIMARY KEY,
-    session_data TEXT NOT NULL,
-    expire_date TIMESTAMP NOT NULL
-);
-
--- Create Django Content Types Table
-CREATE TABLE django_content_type (
-    id SERIAL PRIMARY KEY,
-    app_label VARCHAR(100) NOT NULL,
-    model VARCHAR(100) NOT NULL,
-    UNIQUE(app_label, model)
-);
-
--- Create Django Migrations Table
-CREATE TABLE django_migrations (
-    id SERIAL PRIMARY KEY,
-    app VARCHAR(255) NOT NULL,
-    name VARCHAR(255) NOT NULL,
-    applied TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
 
 -- Insert predefined roles
 INSERT INTO roles (role_name) VALUES ('admin'), ('user');
 
 -- Insert at least 2 users (one admin, one regular user) with hashed passwords
+-- Note: These are overridden by populate_db.py command which creates admin@vacation.com
 INSERT INTO users (first_name, last_name, email, password, role_id, is_admin, is_active, is_staff, is_superuser)
 VALUES 
-('Admin', 'User', 'admin@example.com', 'pbkdf2_sha256$1000000$xuMOp48JFFzacYPyJ4HN0a$N6F6nBrKQoL9y8rCP1dqHvGQHzZ9iYcuyztjjDiDz90=', 1, TRUE, TRUE, TRUE, TRUE),
-('Regular', 'User', 'user@example.com', 'pbkdf2_sha256$1000000$Yqb7rbbgpuBXszKJVA5pNl$T+KOnfPMjY75Z8XW+AX+cWm8aA72QGgll/UoFdPfbco=', 2, FALSE, TRUE, FALSE, FALSE);
+('Admin', 'User', 'admin@vacation.com', 'pbkdf2_sha256$1000000$xuMOp48JFFzacYPyJ4HN0a$N6F6nBrKQoL9y8rCP1dqHvGQHzZ9iYcuyztjjDiDz90=', 1, TRUE, TRUE, TRUE, TRUE),
+('Regular', 'User', 'user@vacation.com', 'pbkdf2_sha256$1000000$Yqb7rbbgpuBXszKJVA5pNl$T+KOnfPMjY75Z8XW+AX+cWm8aA72QGgll/UoFdPfbco=', 2, FALSE, TRUE, FALSE, FALSE);
 
 -- Insert at least 12 countries (United States included)
 INSERT INTO countries (country_name)

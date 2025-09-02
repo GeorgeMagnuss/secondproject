@@ -18,9 +18,9 @@ class Command(BaseCommand):
         if created:
             self.stdout.write('Created roles')
 
-        # Create users
+        # Create users (matching README.md credentials)
         admin_user, created = User.objects.get_or_create(
-            email='admin@example.com',
+            email='admin@vacation.com',
             defaults={
                 'first_name': 'Admin',
                 'last_name': 'User',
@@ -30,12 +30,12 @@ class Command(BaseCommand):
             }
         )
         if created:
-            admin_user.set_password('adminpass')
+            admin_user.set_password('admin123')
             admin_user.save()
             self.stdout.write(f'Created admin user: {admin_user.email}')
         
         regular_user, created = User.objects.get_or_create(
-            email='user@example.com',
+            email='user@vacation.com',
             defaults={
                 'first_name': 'Regular',
                 'last_name': 'User',
@@ -43,7 +43,7 @@ class Command(BaseCommand):
             }
         )
         if created:
-            regular_user.set_password('userpass')
+            regular_user.set_password('user123')
             regular_user.save()
             self.stdout.write(f'Created regular user: {regular_user.email}')
         
