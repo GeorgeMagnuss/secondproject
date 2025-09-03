@@ -45,8 +45,9 @@ class Command(BaseCommand):
                 'is_superuser': True
             }
         )
-        # Always ensure correct password regardless of whether user was created or existed
+        # Always ensure correct password and admin status regardless of whether user was created or existed
         admin_user.set_password('admin123')
+        admin_user.is_admin = True
         admin_user.save()
         if created:
             self.stdout.write(f'Created admin user: {admin_user.email}')
