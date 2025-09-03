@@ -1,3 +1,4 @@
+from typing import Optional, Any, Dict
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.core.validators import MinValueValidator, MaxValueValidator, MinLengthValidator
@@ -6,6 +7,12 @@ from django.utils import timezone
 
 
 class Role(models.Model):
+    """
+    Role model defining user permission levels in the vacation management system.
+    
+    Supports two role types: 'admin' for system administrators with full access,
+    and 'user' for regular users with limited permissions.
+    """
     ROLE_CHOICES = [
         ('admin', 'Admin'),
         ('user', 'User'),
@@ -25,7 +32,13 @@ class Role(models.Model):
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, password=None, **extra_fields):
+    """
+    Custom user manager for the vacation management system.
+    
+    Provides methods for creating regular users and superusers with
+    email-based authentication instead of username.
+    """
+    def create_user(self, email: str, password: Optional[str] = None, **extra_fields: Any) -> 'User':
         if not email:
             raise ValueError('The Email field must be set')
         email = self.normalize_email(email)
@@ -34,13 +47,20 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, password=None, **extra_fields):
+    def create_superuser(self, email: str, password: Optional[str] = None, **extra_fields: Any) -> 'User':
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
         return self.create_user(email, password, **extra_fields)
 
 
 class User(AbstractUser):
+    """
+    Custom user model for the vacation management system.
+    
+    Uses email as the primary authentication field instead of username.
+    Each user is associated with a role (admin or user) that determines
+    their permissions within the system.
+    """
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     email = models.EmailField(max_length=100, unique=True)
@@ -69,6 +89,12 @@ class User(AbstractUser):
 
 
 class Country(models.Model):
+    """
+    Country model representing vacation destinations.
+    
+    Stores country information for vacation packages. Each vacation
+    package is associated with a specific country destination.
+    """
     country_name = models.CharField(max_length=100, unique=True)
     
     def __str__(self) -> str:
@@ -80,6 +106,13 @@ class Country(models.Model):
 
 
 class Vacation(models.Model):
+    """
+    Vacation package model containing all vacation details.
+    
+    Represents individual vacation offerings with country destination,
+    dates, pricing, and image information. Includes validation for
+    logical date ranges and pricing constraints.
+    """
     country = models.ForeignKey(
         Country, 
         on_delete=models.CASCADE,
@@ -126,6 +159,12 @@ class Vacation(models.Model):
 
 
 class Like(models.Model):
+    """
+    Like relationship model between users and vacation packages.
+    
+    Tracks which users have 'liked' specific vacation packages.
+    Enforces unique constraint to prevent duplicate likes from the same user.
+    """
     user = models.ForeignKey(
         User, 
         on_delete=models.CASCADE,

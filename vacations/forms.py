@@ -5,6 +5,12 @@ from .models import User, Role, Country, Vacation
 
 
 class UserRegistrationForm(UserCreationForm):
+    """
+    User registration form for new vacation system accounts.
+    
+    Extends Django's UserCreationForm with additional fields for first name,
+    last name, and email. Includes validation for unique email addresses.
+    """
     first_name = forms.CharField(
         max_length=50,
         widget=forms.TextInput(attrs={'placeholder': 'First Name', 'class': 'form-control'})
@@ -31,12 +37,30 @@ class UserRegistrationForm(UserCreationForm):
         fields = ('first_name', 'last_name', 'email', 'password1', 'password2')
     
     def clean_email(self):
+        """
+        Validate that email address is unique in the system.
+        
+        Returns:
+            str: Cleaned email address
+            
+        Raises:
+            ValidationError: If email already exists in database
+        """
         email = self.cleaned_data.get('email')
         if User.objects.filter(email=email).exists():
             raise ValidationError("A user with this email already exists.")
         return email
     
     def save(self, commit=True):
+        """
+        Save new user with default 'user' role assignment.
+        
+        Args:
+            commit: Whether to save to database immediately
+            
+        Returns:
+            User: Created user instance with assigned role
+        """
         user = super().save(commit=False)
         user.email = self.cleaned_data['email']
         user.first_name = self.cleaned_data['first_name']
@@ -52,6 +76,12 @@ class UserRegistrationForm(UserCreationForm):
 
 
 class UserLoginForm(forms.Form):
+    """
+    User authentication form for vacation system login.
+    
+    Provides email and password fields with proper validation
+    for user authentication process.
+    """
     email = forms.EmailField(
         required=True,
         widget=forms.EmailInput(attrs={
@@ -72,6 +102,12 @@ class UserLoginForm(forms.Form):
 
 
 class VacationForm(forms.ModelForm):
+    """
+    Vacation package creation and editing form.
+    
+    Handles all vacation package data including country selection,
+    description, dates, pricing, and image upload with validation.
+    """
     country = forms.ModelChoiceField(
         queryset=Country.objects.all(),
         widget=forms.Select(attrs={'class': 'form-control'})

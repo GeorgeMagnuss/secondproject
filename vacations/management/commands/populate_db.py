@@ -6,9 +6,25 @@ from django.utils import timezone
 
 
 class Command(BaseCommand):
+    """
+    Django management command to populate database with initial vacation data.
+    
+    Creates roles, users, countries, and vacation packages with realistic data
+    for development and demonstration purposes.
+    """
     help = 'Populate database with initial data from init_db.sql'
 
     def handle(self, *args, **options):
+        """
+        Execute the database population process.
+        
+        Creates all necessary initial data including admin user, countries,
+        and vacation packages with future dates.
+        
+        Args:
+            *args: Variable length argument list
+            **options: Arbitrary keyword arguments
+        """
         self.stdout.write('Populating database with initial data...')
 
         # Create roles
