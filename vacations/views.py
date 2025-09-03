@@ -161,11 +161,11 @@ def add_vacation_view(request):
             # Handle image upload
             if 'image' in request.FILES:
                 image = request.FILES['image']
-                filename = f"vacation_images/{image.name}"
+                filename = f"images/vacation_images/{image.name}"
                 path = default_storage.save(filename, ContentFile(image.read()))
-                vacation.image_file = os.path.basename(path)
+                vacation.image_file = path
             else:
-                vacation.image_file = 'default.jpg'
+                vacation.image_file = 'images/vacation_images/default.jpg'
             
             vacation.save()
             messages.success(request, 'Vacation added successfully!')
@@ -207,9 +207,9 @@ def edit_vacation_view(request, vacation_id):
             # Handle image upload
             if 'image' in request.FILES:
                 image = request.FILES['image']
-                filename = f"vacation_images/{image.name}"
+                filename = f"images/vacation_images/{image.name}"
                 path = default_storage.save(filename, ContentFile(image.read()))
-                vacation.image_file = os.path.basename(path)
+                vacation.image_file = path
             
             vacation.save()
             messages.success(request, 'Vacation updated successfully!')
